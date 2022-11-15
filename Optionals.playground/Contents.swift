@@ -64,4 +64,66 @@ if let theError4 = errorCodeString4, let errorCodeInteger = Int(theError4), erro
 
 //MARK: - Implicitly unwrapped optionals
 
+// the optional is declared with !, signifies it is implicitly wrapped optional.
+// Don't need to unwrap them
+var errorCodeString5: String! = nil
+//errorCodeString5 = "404"
 
+//let anotherErrorCodeString: String = errorCodeString // doesn't work, run time error, anotherErrorCodeString cannot be optional due to explicitly declared type.
+let yetAnotherErrorCodeString = errorCodeString // swift infers safest thing possible: regular optional. have to unwrap the optional to access its value, increases safety of code.
+// For yetAnotherErrorCodeString to be implicitly unwrapped optional, the compiler requires you to be explicit. declare the type of optional you want is implicitly unwrapped- let yetAnotherErrorCodeString: String! = errorCodeString
+
+
+
+
+//MARK: - Optional Chaining
+// chaining provides a mechanism for querying an optional to determine whether it contains a value.
+// one difference to binding is that chaining allows programmer to chain numerous queries into an optional's value.
+// If any optional in the query chain is nil, the entire chain will return nil
+
+var errorCodeString6: String?
+errorCodeString6 = "404"
+var errorDescription: String?
+if let theError6 = errorCodeString6, let errorCodeInteger = Int(theError6), errorCodeInteger == 404 {
+    errorDescription = "\(errorCodeInteger + 200): resource was not found"
+}
+
+var upCaseErrorDescription = errorDescription?.uppercased()
+errorDescription
+
+// Used optional chaining to create new instance of error description to be all uppercase.
+// ? appended to end of errorDescription signals the line of code initiates the optional chaining process.
+// If errorDescription's value is nil then theres no string to uppercase.
+
+
+//MARK: - Modifying an optional in place
+
+upCaseErrorDescription?.append(" PLEASE TRY AGAIN") // ? works similar to optional chaining, exposes the value of the optional if it exists, if was nil no value would exist to update.
+upCaseErrorDescription // "604: RESOURCE WAS NOT FOUND PLEASE TRY AGAIN"
+
+
+
+//MARK: - Nil Coalescing Operator
+
+//let description: String
+//if let errorDescription = errorDescription {
+//    description = errorDescription
+//} else {
+//    description = "No error"
+//}
+
+// SIMPLIFIED METHOD USING NIL COALESCING OPERATOR (??)
+//errorDescription = nil
+let description = errorDescription ?? "No error"
+
+// Left hand side of ?? must be optional(errorDescription), right hand side must be non-optional of same type(String)
+// If left side is nil, ?? returns right side
+// if left side optional is not nill, ?? returns the value contained in the optional
+
+
+//MARK: - Bronze Challenge
+// Q: The number of kids a parent has? "Int" or "Int?"
+// A: Int as "parent" indicates definitely has children
+
+// Q: The name of person's pet: "String" or "String?"
+// A: String? as not everyone has a pet
