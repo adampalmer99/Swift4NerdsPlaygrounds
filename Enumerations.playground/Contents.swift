@@ -110,8 +110,12 @@ print("The bulb's temperature is \(bulbTemperature)")
 
 //MARK: - Associated Values
 
-
+// Setting up a point
 enum ShapeDimensions {
+    
+    // point has no associated value- it's dimensionless
+    case point
+    
     // square's associated value is the length of one side
     case square(side: Double)
     
@@ -120,6 +124,10 @@ enum ShapeDimensions {
     
     func area() -> Double {
         switch self {
+            
+        case .point:
+            return 0
+            
         case let .square(side: side):
             return side * side
             
@@ -133,6 +141,35 @@ enum ShapeDimensions {
 // creating shapes
 var squareShape = ShapeDimensions.square(side: 10.0)
 var rectangleShape = ShapeDimensions.rectangle(width: 5.0, height: 10.0)
+var pointShape = ShapeDimensions.point
 
 print("square's area is \(squareShape.area())")
 print("rectangle's area is \(rectangleShape.area())")
+
+
+
+
+
+//MARK: - Recursive Enumerations
+
+// Recursive enum 'FamilyTree' is not marked 'indirect'
+// The compiler can't determine how big a FamilyTree is without knowing how big a FamilyTree is, would require an infinite amount of memory.
+// Pointer- compiler now knows to store a pointer to the associated data, putting the data somewhere else rather than making the instance of FamilyTree big enough to hold the data. The size of an instance of FamilyTree is now 8 bytes on a 64-bit architecture- the size of one pointer.
+
+indirect enum FamilyTree {
+    
+    case noKnownParents
+    case oneKnownParent(name: String, ancestors: FamilyTree)
+    case twoKnownParents(fatherName: String, fatherAncestors: FamilyTree, mothersName: String, mothersAncestors: FamilyTree)
+}
+
+//MARK: - Family tree indirect cases
+
+enum FamilyTree2 {
+    
+    case noKnownParents
+   indirect case oneKnownParent(name: String, ancestors: FamilyTree2)
+   indirect case twoKnownParents(fatherName: String, fatherAncestors: FamilyTree2, mothersName: String, mothersAncestors: FamilyTree2)
+}
+
+let fredAncestors = FamilyTree2.twoKnownParents(fatherName: "Fred Sr", fatherAncestors: .oneKnownParent(name: "Beth", ancestors: .noKnownParents), mothersName: "Marsha", mothersAncestors: .noKnownParents)
