@@ -7,10 +7,15 @@
 
 import Foundation
 
-
+// Keyword "Static", Type properties on value types(see Value Types mark on main.swift)
 struct Town {
-    let region = "South"
-    var population = 5_422
+   static let region = "South"
+    var population = 5_422 {
+        // Property Observers- syntax similar to getters and setters. Created custom parameter name for old population, "didSet" observer gives handle on property's old value. ("willSet" Swift generates a newValue parameter. 
+        didSet(oldPopulation) {
+            print("The population has changed to \(population) from \(oldPopulation)")
+        }
+    }
     var numberOfStopLights = 4
     
     enum Size {

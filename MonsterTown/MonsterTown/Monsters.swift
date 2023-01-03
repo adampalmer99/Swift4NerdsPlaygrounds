@@ -8,6 +8,13 @@
 import Foundation
 
 class Monster {
+    // Add new static property to represent the fact monsters are terrifying, because added to Zombie's superclass "Monster" it is available on Zombie. 
+    static let isTerrifying = true
+    
+    class var spookyNoise: String {
+        return "Grrr"
+    }
+    
     var town: Town?
     var name = "Monster"
     
