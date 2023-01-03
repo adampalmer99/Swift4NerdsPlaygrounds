@@ -9,9 +9,12 @@ import Foundation
 
 
 var myTown = Town()
+let myTownSize = myTown.townSize
+print(myTownSize)
 print("Population: \(myTown.population), number of stoplights: \(myTown.numberOfStopLights)")
 
-myTown.changePopulation(by: 500)
+// Changing myTown population does not change townSize- Due to being lazy still on first time it was calculated.
+myTown.changePopulation(by: 1_000_000)
 myTown.printDescription()
 
 let genericMonster = Monster()
