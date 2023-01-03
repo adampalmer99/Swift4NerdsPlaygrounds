@@ -14,10 +14,15 @@ class Zombie: Monster {
         return "Brains..."
     }
     var walksWithLimp = true
+//    private var isFallingApart = false // Falling apart is a private matter
+//    internal private(set) var isFallingApart = false // making the getter internal and setter private
+    private(set) var isFallingApart = false // Using default getter visibility
     
     // prevent override of terroriseTown(): "final override func"
-    override func terroriseTown() {
+   final override func terroriseTown() {
+       if !isFallingApart {
         town?.changePopulation(by: -10)
+       }
         super.terroriseTown()
     }
 }
