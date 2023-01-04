@@ -16,7 +16,8 @@ class Monster {
     }
     
     var town: Town?
-    var name = "Monster"
+//    var name = "Monster"
+    var name: String
     
     // define getter for the property via same gert used for townSize, the getter uses nil coalescing operator to check whether the Monster instance has a town it is terrorising. if yes it returns towns population, if the instance has not yet found a town to terrorise, it returns 0.
     var victimPool: Int {
@@ -27,6 +28,11 @@ class Monster {
         set(newVictimPool) {
             town?.population = newVictimPool
         }
+    }
+    // argument for ton in the initialiser matches property name so have to set property's value through self, but name doesn't need self because initialiser's parameter name is different.
+  required init(town: Town?, monsterName: String) {    //"required" means subclasses must implement this initialiser
+        self.town = town
+        name = monsterName
     }
  
     

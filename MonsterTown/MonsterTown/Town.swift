@@ -9,14 +9,24 @@ import Foundation
 
 // Keyword "Static", Type properties on value types(see Value Types mark on main.swift)
 struct Town {
-   static let region = "South"
-    var population = 5_422 {
+//   static let region = "South"
+    let region: String
+    var population: Int  {
         // Property Observers- syntax similar to getters and setters. Created custom parameter name for old population, "didSet" observer gives handle on property's old value. ("willSet" Swift generates a newValue parameter. 
         didSet(oldPopulation) {
             print("The population has changed to \(population) from \(oldPopulation)")
         }
     }
-    var numberOfStopLights = 4
+    var numberOfStopLights: Int
+    init(region: String, population: Int, stopLights: Int) {
+        self.region = region
+        self.population = population
+        numberOfStopLights = stopLights
+    }
+    // Because no argument for region you provide own value "N/A"
+    init(population: Int, stopLights: Int) {
+        self.init(region: "N/A", population: population, stopLights: stopLights)
+    }
     
     enum Size {
         case small
@@ -56,7 +66,7 @@ struct Town {
 }
     
     func printDescription() {
-        print("population: \(population); number of stoplights: \(numberOfStopLights)")
+        print("population: \(population); number of stoplights: \(numberOfStopLights); region: \(region)")
     }
     
     mutating func changePopulation(by amount: Int) {

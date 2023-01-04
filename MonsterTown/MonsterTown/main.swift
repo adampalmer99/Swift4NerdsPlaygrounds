@@ -8,7 +8,9 @@
 import Foundation
 
 
-var myTown = Town()
+//var myTown = Town()
+// using intialisers
+var myTown = Town(region: "West", population: 10_000, stopLights: 6 )
 let myTownSize = myTown.townSize
 print(myTownSize)
 print("Population: \(myTown.population), number of stoplights: \(myTown.numberOfStopLights)")
@@ -18,23 +20,25 @@ myTown.changePopulation(by: 1_000_000)
 print("Size: \(myTown.townSize); population: \(myTown.population)")
 myTown.printDescription()
 
-let genericMonster = Monster()
-genericMonster.town = myTown
-genericMonster.terroriseTown()
+//let genericMonster = Monster()
+//genericMonster.town = myTown
+//genericMonster.terroriseTown()
 
-let fredTheZombie = Zombie()
-fredTheZombie.town = myTown
-fredTheZombie.terroriseTown()
-fredTheZombie.town?.printDescription()
+var fredTheZombie: Zombie? = Zombie(limp: false, fallingApart: false, town: myTown, monsterName: "Fred")
+fredTheZombie?.terroriseTown()
+fredTheZombie?.town?.printDescription()
 
-print("Victim pool: \(fredTheZombie.victimPool)")
-fredTheZombie.victimPool = 500
-print("Victim pool: \(fredTheZombie.victimPool)")
+// creating a convenient zombie
+var convenientZombie = Zombie(limp: true, fallingApart: false)
+
+print("Victim pool: \(fredTheZombie?.victimPool)")
+fredTheZombie?.victimPool = 500
+print("Victim pool: \(fredTheZombie?.victimPool)")
 print(Zombie.spookyNoise)
 if Zombie.isTerrifying {
     print("Run away!")
 }
-
+fredTheZombie = nil
 
 
 //MARK: - Instance Properties
