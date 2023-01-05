@@ -39,3 +39,27 @@ let zeus = GreekGod(name: "Zeus")
 // When you change the value that the name property stores, you are not changing what zeus is(which is a reference to a GreekGod). Because name is a mutable stored property, when you define the GreekGod class(via var declaration) you're free to change it as much as wanted. Regardless how much "Zeus"'s name is changed, zeus still refers to the same instance.
 zeus.name = "Zeus Jr"
 zeus.name
+
+// chiefGod property is of type greekGod, greekGod is a class so is a reference type.
+pantheon.chiefGod.name //AnotherHecate
+let greekPantheon = pantheon
+hecate.name = "Trivia"
+greekPantheon.chiefGod.name
+
+//MARK: - Copying
+//gods and godsCopy have references to the same instances of GreekGod. gods contains instances of GreekGod, which is a class, which makes it a reference type.
+
+//example of shallow copying. Shallow copying does not create a distinct copy of an instance, it creates a duplicate of the instance's reference.
+let athena = GreekGod(name: "Athena")
+
+let gods = [athena, hecate, zeus]
+let godsCopy = gods
+gods.last?.name = "Jupiter"
+gods
+godsCopy
+
+// Deep Copy
+// Deep copies duplicate the instance at the destination of a reference. Which would mean godsCopy's indices wouldn't reference the same instances of GreekGod. It would create a new array with references to its own instances of GreekGod.
+
+
+
