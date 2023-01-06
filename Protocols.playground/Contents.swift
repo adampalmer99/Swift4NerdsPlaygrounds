@@ -1,20 +1,34 @@
 import Cocoa
 
-func printTable(_ data: [[String]], withColumnLabels columnLabels: String...) {
+//MARK: - Defining a Protocol
+//TabularDataSource protocol states any conforming type must have 2 properties: numOfRows abd NumOfColumns.
+
+protocol TabularDataSource {
+    var numberOfRows: Int { get }          // If property was intended to be read/write, use "{ get set }"
+    var numberOfColumns: Int { get }
+    
+    func label(forColumn column: Int) -> String
+    
+    func itemFor(row: Int, column: Int) -> String
+}
+
+
+func printTable(_ dataSource: TabularDataSource) {
     // Create first row containing column headers
     var firstRow = "|"
     
     // Keep track of column width
     var columnWidths = [Int]()
     
-    for columnLabel in columnLabels {
+    for i in 0 ..< dataSource.numberOfColumns {
+        let columnLabel = dataSource.label(forColumn: i)
         let columnHeader = " \(columnLabel) |"
         firstRow += columnHeader
         columnWidths.append(columnLabel.count)
     }
     print(firstRow)
     
-    for row in data {
+    for i in 0 ..< dataSource.numberOfRows {
         // Start the output string
         var out = "|"
         
@@ -23,7 +37,8 @@ func printTable(_ data: [[String]], withColumnLabels columnLabels: String...) {
 //            out += " \(item) |"
 //        }
         // Append each item in this row to the String
-        for (j, item) in row.enumerated() {
+        for j in 0 ..< dataSource.numberOfColumns {
+            let item = dataSource.itemFor(row: i, column: j)
             let paddingNeeded = columnWidths[j] - item.count
             let padding = repeatElement(" ", count: paddingNeeded).joined(separator: "")
             out += " \(padding)\(item) |"
@@ -40,4 +55,66 @@ let data = [
 ]
 
 
-printTable(data, withColumnLabels: "Employee Name", "Age", "Years of experience")
+
+
+//printTable(data, withColumnLabels: "Employee Name", "Age", "Years of experience")
+struct Person {
+    let name: String
+    let age: Int
+    let yearsOfExperience: Int
+}
+
+struct Department: TabularDataSource, CustomStringConvertible {
+    
+    let name: String
+    var people = [Person]()
+    
+    // Conforming to CustomStringConvertible
+    var description: String {
+        return "Department (\(name))"
+    }
+
+    init(name: String) {
+        self.name = name
+    }
+    
+    mutating func add(_ person: Person) {
+        people.append(person)
+    }
+    
+    var numberOfRows: Int {
+        return people.count
+    }
+    
+    var numberOfColumns: Int {
+        return 3
+    }
+    
+    func label(forColumn column: Int) -> String {
+        switch column {
+        case 0: return "Employee Name"
+        case 1: return "Age"
+        case 2: return "Years of Experience"
+        default: fatalError("Invalid column!")
+        }
+    }
+    
+    func itemFor(row: Int, column: Int) -> String {
+        let person = people[row]
+        switch column {
+        case 0: return person.name
+        case 1: return String(person.age)
+        case 2: return String(person.yearsOfExperience)
+        default: fatalError("Invalid column!")
+        }
+    }
+}
+
+
+var department = Department(name: "Engineering")
+department.add(Person(name: "Joe", age: 30, yearsOfExperience: 6))
+department.add(Person(name: "Karen", age: 40, yearsOfExperience: 18))
+department.add(Person(name: "Fred", age: 50, yearsOfExperience: 20))
+
+printTable(department)
+print(department)
