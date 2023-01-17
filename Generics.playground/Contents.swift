@@ -30,12 +30,27 @@ import Cocoa
 //print(intStack.pop()) // prints optional 1
 //print(intStack.pop()) // prints nil
 
+//MARK: - Associated Type Protocols
+// StackIterator wraps up a stack and generates values by popping items off the stack. The type of the Element that "next()" return is T, hence setting the typealias appropriately.
+
+struct StackIterator<T>: IteratorProtocol {
+//    typealias Element = T
+    
+    var stack: Stack<T>
+    
+//    mutating func next() -> Element? {
+    mutating func next() -> T? {
+        return stack.pop()
+    }
+}
+
+
 
 //MARK: - Making Stack generic
 // Add a placeholder type "<Element>" named Element, to declaration of the stack.
 // Swift syntax for declaring a generic uses angle brackets<> and immediately follos name of the type.
 // The placeholder type Element can be used inside the Stack structure anywhere a concrete type could be used- replaced all the "Int" occurences with "Element".
-struct Stack<Element> {
+struct Stack<Element>: Sequence {
     var items = [Element]()
     
     mutating func push(_ newItem: Element) {
@@ -58,6 +73,11 @@ struct Stack<Element> {
             mappedItems.append(f(item))
         }
         return Stack<U>(items: mappedItems)
+    }
+    
+    // Stack conform to sequence. "struct Stack<Element>: SEQUENCE {"
+    func makeIterator() -> StackIterator<Element> {
+        return StackIterator(stack: self)
     }
 }
 
@@ -116,3 +136,24 @@ func checkIfDescriptionMatch<T: CustomStringConvertible, U: CustomStringConverti
 print(checkIfDescriptionMatch(Int(1), UInt(1)))     // true
 print(checkIfDescriptionMatch(1, 1.0))          // false
 print(checkIfDescriptionMatch(Float(1.0), Double(1.0)))    // true
+
+
+
+
+//MARK: - Using StackIterator
+
+var myStack = Stack<Int>()
+myStack.push(10)
+myStack.push(20)
+myStack.push(30)
+
+var myStackIterator = StackIterator(stack: myStack)
+while let value = myStackIterator.next() {
+    print("got \(value)")
+}
+
+
+// Looping over "myStack"
+for value in myStack {
+    print("for-in loop: got \(value)")
+}
